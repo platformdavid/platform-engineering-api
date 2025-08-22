@@ -14,7 +14,10 @@ import sys
 from pathlib import Path
 
 # Add the app directory to the Python path
-sys.path.append(str(Path(__file__).parent))
+sys.path.append(str(Path(__file__).parent.parent))
+
+# Force SQLite database URL to avoid PostgreSQL compilation issues
+os.environ["DATABASE_URL"] = "sqlite+aiosqlite:///./platform_engineering.db"
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import AsyncSessionLocal, init_db

@@ -96,7 +96,7 @@ LOG_LEVEL=INFO
 # AWS Settings (we'll set this up later)
 AWS_ACCESS_KEY_ID=your-aws-access-key
 AWS_SECRET_ACCESS_KEY=your-aws-secret-key
-AWS_REGION=us-east-1
+AWS_REGION=eu-west-2
 AWS_PROFILE=default
 AWS_S3_BUCKET=platformdavid-platform-engineering
 
@@ -169,11 +169,7 @@ python -c "import boto3; print('Boto3 installed successfully')"
 ### **4.1 Install PostgreSQL**
 ```bash
 # Option 1: Docker (recommended for testing)
-docker run -d --name postgres \
-  -e POSTGRES_PASSWORD=password \
-  -e POSTGRES_DB=platform_engineering_db \
-  -p 5432:5432 \
-  postgres:15
+docker run -d --name platform-engineering-postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=platform_engineering_db -p 5432:5432 postgres:15
 
 # Option 2: Local installation
 # Windows: Download from https://www.postgresql.org/download/windows/
@@ -253,7 +249,7 @@ curl -H "Authorization: token $GITHUB_TOKEN" \
 ```bash
 # Go to AWS Console → S3 → Create Bucket
 # Bucket name: platformdavid-platform-engineering
-# Region: us-east-1
+# Region: eu-west-2
 # Block all public access: Uncheck (for static hosting)
 # Bucket versioning: Disable (to save costs)
 
@@ -267,8 +263,8 @@ AWS_S3_BUCKET=platformdavid-platform-engineering
 # VPC name: platform-engineering-vpc
 # CIDR: 10.0.0.0/16
 # Create subnets:
-# - Public: 10.0.1.0/24 (us-east-1a)
-# - Private: 10.0.2.0/24 (us-east-1a)
+# - Public: 10.0.1.0/24 (eu-west-2a)
+# - Private: 10.0.2.0/24 (eu-west-2a)
 
 # Note down subnet IDs for Terraform
 ```

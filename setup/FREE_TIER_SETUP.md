@@ -54,7 +54,7 @@ DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/platform_engi
 # AWS (Your existing account - FREE tier for 12 months)
 AWS_ACCESS_KEY_ID=your-aws-access-key
 AWS_SECRET_ACCESS_KEY=your-aws-secret-key
-AWS_REGION=us-east-1
+AWS_REGION=eu-west-2
 
 # GitHub (FREE - unlimited public repos)
 GITHUB_TOKEN=your-github-token

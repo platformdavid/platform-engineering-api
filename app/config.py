@@ -19,10 +19,15 @@ class Settings(BaseSettings):
     port: int = 8000
     
     # Database Settings
-    database_url: str = "postgresql+asyncpg://user:password@localhost:5432/platform_engineering_db"
+    database_url: str = "sqlite+aiosqlite:///./platform_engineering.db"
     
     # CORS Settings
-    cors_origins: List[str] = ["http://localhost:3000", "http://127.0.0.1:3000"]
+    cors_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
+    
+    @property
+    def cors_origins_list(self) -> List[str]:
+        """Convert comma-separated CORS origins to list."""
+        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
     
     # Redis Settings
     redis_url: str = "redis://localhost:6379/0"
@@ -33,7 +38,7 @@ class Settings(BaseSettings):
     # AWS Settings
     aws_access_key_id: str = "your-aws-access-key"
     aws_secret_access_key: str = "your-aws-secret-key"
-    aws_region: str = "us-east-1"
+    aws_region: str = "eu-west-2"
     aws_profile: str = "default"
     aws_s3_bucket: str = "your-s3-bucket"
     

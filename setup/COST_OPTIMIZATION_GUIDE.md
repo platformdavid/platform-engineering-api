@@ -152,7 +152,7 @@ Total: $0.42/month
 
 ```bash
 # Update your .env with cost-optimized settings
-AWS_REGION=us-east-1  # Cheapest region
+AWS_REGION=eu-west-2  # Cheapest region
 AWS_PROFILE=default
 
 # Cost optimization flags

@@ -1,180 +1,211 @@
-# FanDuel Platform Engineering API
+# Platform Engineering API
 
-A modern FastAPI-based platform engineering template designed for the FanDuel Builder Tools team.
+A comprehensive platform engineering API for managing services, CI/CD pipelines, and infrastructure. Built with FastAPI, designed for platform engineering teams.
 
-## 🚀 Features
+## 🚀 Quick Start
 
-- **FastAPI** with modern async Python
-- **SQLAlchemy** with async database operations
-- **Pydantic** for data validation and serialization
-- **Automatic API Documentation** with OpenAPI/Swagger
-- **Testing** with pytest-asyncio and httpx
-- **Code Quality** with black, flake8, isort, and mypy
-- **Docker** support for containerization
-- **Environment Management** with pydantic-settings
-- **Task Queue** with Celery and Redis
-
-## 🏗️ Architecture
-
-This template follows modern platform engineering practices:
-
-- **Clean Architecture** with separation of concerns
-- **Service Layer** for business logic
-- **Dependency Injection** ready
-- **Type Hints** throughout the codebase
-- **Async Support** with FastAPI and SQLAlchemy
-
-## 📦 Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd FanDuel
-   ```
-
-2. **Create a virtual environment**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Set up environment variables**
-   ```bash
-   cp env.example .env
-   # Edit .env with your configuration
-   ```
-
-5. **Run database migrations**
-   ```bash
-   alembic upgrade head
-   ```
-
-6. **Run the development server**
-   ```bash
-   uvicorn app.main:app --reload
-   ```
-
-## 🏃‍♂️ Quick Start
-
-### FastAPI Development Server
+### **1. Install Dependencies**
 ```bash
-uvicorn app.main:app --reload
-```
-Visit: http://localhost:8000
-
-### API Documentation
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-- **OpenAPI Schema**: http://localhost:8000/openapi.json
-
-### Running Tests
-```bash
-pytest
+python setup/install.py
 ```
 
-### Code Formatting
+### **2. Test Installation**
 ```bash
-black .
-isort .
+python setup/test_api.py
 ```
+
+### **3. Run the API**
+```bash
+python -m uvicorn setup.test_api:app --reload
+```
+
+Visit http://localhost:8000/docs for interactive API documentation.
 
 ## 📁 Project Structure
 
 ```
 FanDuel/
-├── app/                     # Main application package
-│   ├── __init__.py
-│   ├── main.py             # FastAPI application entry point
-│   ├── config.py           # Configuration settings
-│   ├── models/             # SQLAlchemy models
-│   ├── schemas/            # Pydantic schemas
-│   ├── api/                # API routes
-│   │   └── v1/            # API version 1
+├── app/                    # Main application code
+│   ├── api/               # API endpoints
 │   ├── core/              # Core functionality
-│   │   └── database.py    # Database configuration
-│   └── services/          # Business logic layer
-├── alembic/               # Database migrations
+│   ├── models/            # Database models
+│   ├── schemas/           # Pydantic schemas
+│   └── services/          # Business logic
+├── setup/                 # Setup scripts and documentation
+│   ├── install.py         # Installation script
+│   ├── test_api.py        # Test suite and API server
+│   ├── setup_database.py  # Database initialization
+│   ├── env.example        # Environment template
+│   └── *.md              # Setup documentation
 ├── tests/                 # Test files
 ├── requirements.txt       # Python dependencies
-├── env.example           # Environment variables template
-├── .gitignore           # Git ignore file
-├── README.md            # This file
-├── Dockerfile           # Docker configuration
-├── docker-compose.yml   # Multi-service setup
-└── nginx.conf           # Reverse proxy configuration
+├── docker-compose.yml     # Docker configuration
+├── Dockerfile            # Docker image
+└── README.md             # This file
 ```
+
+## 🎯 Features
+
+### **Core Platform Features**
+- ✅ **Service Management**: Create and manage services from templates
+- ✅ **CI/CD Automation**: GitHub Actions integration
+- ✅ **Infrastructure as Code**: Terraform integration
+- ✅ **Monitoring**: Prometheus and Grafana integration
+- ✅ **Multi-Environment Support**: Dev, staging, production
+- ✅ **Team Management**: Multi-team service organization
+
+### **Service Templates**
+- **FastAPI API**: Python REST API with comprehensive testing
+- **React Web**: Frontend application with modern tooling
+- **Celery Worker**: Background task processing
+- **Node.js API**: Express.js REST API
+
+### **Platform Tools Integration**
+- **AWS**: ECS, S3, Lambda, CloudWatch
+- **Kubernetes**: Local and cloud deployments
+- **GitHub**: Repository management and CI/CD
+- **Monitoring**: Prometheus, Grafana, health checks
+
+## 🛠️ Setup Options
+
+### **Option 1: Simple Setup (Recommended)**
+```bash
+python setup/install.py
+python setup/test_api.py
+python -m uvicorn setup.test_api:app --reload
+```
+
+### **Option 2: Full Setup with Database**
+See `setup/SETUP_GUIDE.md` for complete instructions.
+
+### **Option 3: Free Tier Setup**
+See `setup/FREE_TIER_SETUP.md` for zero-cost setup.
+
+### **Option 4: Cost-Optimized Setup**
+See `setup/COST_OPTIMIZATION_GUIDE.md` for cost optimization.
+
+## 📚 Documentation
+
+All setup documentation is organized in the `setup/` folder:
+
+- **`setup/README.md`** - Setup folder overview
+- **`setup/SETUP_GUIDE.md`** - Main setup guide
+- **`setup/SETUP_STEP_BY_STEP.md`** - Detailed instructions
+- **`setup/FREE_TIER_SETUP.md`** - Free setup guide
+- **`setup/COST_OPTIMIZATION_GUIDE.md`** - Cost optimization
 
 ## 🔧 Configuration
 
-### Environment Variables
-Create a `.env` file based on `env.example`:
+### **Environment Variables**
+```bash
+# Copy the template
+cp setup/env.example .env
 
-```env
-# Application
-APP_NAME=FanDuel Platform API
-DEBUG=True
-SECRET_KEY=your-secret-key-here
-HOST=0.0.0.0
-PORT=8000
-
-# Database
-DATABASE_URL=postgresql+asyncpg://user:password@localhost:5432/fanduel_db
-
-# CORS
-CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
-
-# Redis
-REDIS_URL=redis://localhost:6379/0
+# Edit with your values
+nano .env
 ```
+
+### **Required Configuration**
+- AWS credentials (for infrastructure)
+- GitHub token (for CI/CD)
+- Database connection (optional)
+- Kubernetes cluster (optional)
 
 ## 🧪 Testing
 
-The project includes comprehensive testing setup:
-
-- **Unit Tests**: Using pytest and pytest-asyncio
-- **Integration Tests**: API endpoint testing with httpx
-- **Coverage**: Test coverage reporting
-
-Run tests with:
+### **Run Tests**
 ```bash
-pytest --cov=app --cov-report=html
+# Test the installation
+python setup/test_api.py
+
+# Run application tests
+pytest
+
+# Run with coverage
+pytest --cov=app
 ```
 
-## 📚 API Documentation
-
-- **Swagger UI**: Interactive API documentation at `/docs`
-- **ReDoc**: Alternative documentation at `/redoc`
-- **OpenAPI Schema**: Machine-readable schema at `/openapi.json`
-
-## 🐳 Docker Support
-
-Build and run with Docker:
-
+### **API Testing**
 ```bash
+# Start the API
+python -m uvicorn setup.test_api:app --reload
+
+# Test endpoints
+curl http://localhost:8000/health
+curl http://localhost:8000/services
+```
+
+## 🚀 Deployment
+
+### **Development**
+```bash
+python -m uvicorn setup.test_api:app --reload
+```
+
+### **Production**
+```bash
+# Using Gunicorn
+gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.main:app
+
+# Using Docker
 docker-compose up --build
 ```
 
-## 🚀 Deployment Ready
+## 📊 API Endpoints
 
-This template includes:
+### **Core Endpoints**
+- `GET /` - Root endpoint with API information
+- `GET /health` - Health check for all components
+- `GET /services` - List managed services
+- `GET /platform-tools` - Platform tools information
+- `GET /config` - Current configuration
 
-- **Production Settings**: Optimized for production deployment
-- **Health Checks**: Built-in health check endpoints
-- **Security Headers**: CORS and security middleware
-- **Logging**: Structured logging with structlog
-- **Monitoring**: Ready for integration
+### **Service Management**
+- `POST /api/v1/services` - Create new service
+- `GET /api/v1/services` - List all services
+- `GET /api/v1/services/{id}` - Get service details
+- `PUT /api/v1/services/{id}` - Update service
+- `DELETE /api/v1/services/{id}` - Delete service
 
-## 📖 Learning Resources
+### **Service Provisioning**
+- `POST /api/v1/services/{id}/provision` - Provision service
+- `POST /api/v1/services/from-template/{template}` - Create from template
 
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
-- [Pydantic Documentation](https://docs.pydantic.dev/)
-- [Python Type Hints](https://docs.python.org/3/library/typing.html)
+## 🎯 Use Cases
+
+### **Platform Engineering Teams**
+- Self-service service creation
+- Standardized CI/CD pipelines
+- Infrastructure automation
+- Multi-team support
+
+### **Development Teams**
+- Quick service setup
+- Automated testing
+- Deployment automation
+- Monitoring integration
+
+### **DevOps Teams**
+- Infrastructure as Code
+- Cost optimization
+- Security compliance
+- Performance monitoring
+
+## 🔒 Security
+
+- Environment-based configuration
+- Secure secret management
+- API authentication (configurable)
+- CORS protection
+- Input validation with Pydantic
+
+## 📈 Monitoring
+
+- Health checks for all components
+- Prometheus metrics
+- Grafana dashboards
+- AWS CloudWatch integration
+- Custom alerting
 
 ## 🤝 Contributing
 
@@ -182,9 +213,22 @@ This template includes:
 2. Create a feature branch
 3. Make your changes
 4. Add tests
-5. Run code quality checks
-6. Submit a pull request
+5. Submit a pull request
 
 ## 📄 License
 
-This template is provided for the FanDuel tech test and learning purposes.
+This project is licensed under the MIT License.
+
+## 🆘 Support
+
+For setup issues, see the documentation in the `setup/` folder.
+
+For technical issues:
+1. Check the troubleshooting guides
+2. Review the API documentation
+3. Check the test suite
+4. Open an issue on GitHub
+
+---
+
+**Built with ❤️ for Platform Engineering teams**
