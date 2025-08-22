@@ -2,16 +2,18 @@
 Platform service for orchestrating complete service provisioning.
 
 This service coordinates CI/CD, infrastructure, and monitoring setup.
+Uses repository pattern similar to .NET services.
 """
 
 from typing import List, Optional, Dict, Any
 import asyncio
 
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.service import Service, ServiceStatus
 from app.schemas.service import ServiceCreate, ServiceUpdate, ServiceProvision
+from app.repositories.service_repository import ServiceRepository
+from app.mappers.service_mapper import ServiceMapper
 from app.services.github_actions_service import GitHubActionsService
 from app.services.terraform_service import TerraformService
 from app.services.kubernetes_service import KubernetesService
@@ -33,6 +35,7 @@ class PlatformService:
             db: Database session
         """
         self.db = db
+        self.service_repository = ServiceRepository(db)
         self.github_actions_service = GitHubActionsService()
         self.terraform_service = TerraformService()
         self.kubernetes_service = KubernetesService()
@@ -47,24 +50,11 @@ class PlatformService:
         Returns:
             Service: Created service
         """
-        db_service = Service(
-            name=service_in.name,
-            team=service_in.team,
-            service_type=service_in.service_type,
-            environment=service_in.environment,
-            description=service_in.description,
-            tags=service_in.tags,
-            configuration=service_in.configuration,
-            infrastructure_config=service_in.infrastructure_config,
-            monitoring_config=service_in.monitoring_config,
-            status=ServiceStatus.PENDING
-        )
-
-        self.db.add(db_service)
-        await self.db.commit()
-        await self.db.refresh(db_service)
-
-        return db_service
+        # Use mapper to convert DTO to entity
+        db_service = ServiceMapper.dto_to_entity(service_in)
+        
+        # Use repository to save entity
+        return await self.service_repository.create(db_service)
 
     async def provision_service(self, service_id: int, provision_config: ServiceProvision) -> Service:
         """
@@ -249,8 +239,7 @@ class PlatformService:
         Returns:
             Optional[Service]: Service if found, None otherwise
         """
-        result = await self.db.execute(select(Service).where(Service.id == service_id))
-        return result.scalar_one_or_none()
+        return await self.service_repository.get_by_id(service_id)
 
     async def get_services_by_team(self, team: str, skip: int = 0, limit: int = 100) -> List[Service]:
         """
@@ -264,13 +253,7 @@ class PlatformService:
         Returns:
             List[Service]: List of services
         """
-        result = await self.db.execute(
-            select(Service)
-            .where(Service.team == team)
-            .offset(skip)
-            .limit(limit)
-        )
-        return result.scalars().all()
+        return await self.service_repository.get_by_team(team, skip, limit)
 
     async def get_all_services(self, skip: int = 0, limit: int = 100) -> List[Service]:
         """
@@ -283,10 +266,7 @@ class PlatformService:
         Returns:
             List[Service]: List of services
         """
-        result = await self.db.execute(
-            select(Service).offset(skip).limit(limit)
-        )
-        return result.scalars().all()
+        return await self.service_repository.get_all(skip, limit)
 
     async def update_service(self, service_id: int, service_in: ServiceUpdate) -> Optional[Service]:
         """
@@ -303,14 +283,11 @@ class PlatformService:
         if not service:
             return None
 
-        update_data = service_in.dict(exclude_unset=True)
-        for field, value in update_data.items():
-            setattr(service, field, value)
-
-        await self.db.commit()
-        await self.db.refresh(service)
-
-        return service
+        # Use mapper to update entity from DTO
+        updated_service = ServiceMapper.update_entity_from_dto(service, service_in)
+        
+        # Use repository to save changes
+        return await self.service_repository.update(updated_service)
 
     async def delete_service(self, service_id: int) -> bool:
         """
@@ -355,15 +332,10 @@ class PlatformService:
             # Wait for cleanup to complete
             await asyncio.gather(*cleanup_tasks, return_exceptions=True)
 
-            # Delete service from database
-            await self.db.delete(service)
-            await self.db.commit()
-
-            return True
+            # Use repository to delete service
+            return await self.service_repository.delete_by_id(service_id)
 
         except Exception as e:
             # Log error but still delete from database
             print(f"Error during service cleanup: {e}")
-            await self.db.delete(service)
-            await self.db.commit()
-            return True
+            return await self.service_repository.delete_by_id(service_id)
