@@ -1,6 +1,6 @@
 # Platform Engineering API
 
-A comprehensive platform engineering API for managing services, CI/CD pipelines, and infrastructure. Built with FastAPI, designed for platform engineering teams.
+A comprehensive platform engineering API for managing services, CI/CD pipelines, and infrastructure. Built with FastAPI, designed for platform engineering teams
 
 ## 🚀 Quick Start
 
