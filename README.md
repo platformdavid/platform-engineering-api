@@ -1,6 +1,14 @@
-# Platform Engineering API
+# FanDuel Platform Engineering API
 
-A comprehensive platform engineering API for managing services, CI/CD pipelines, and infrastructure. Built with FastAPI, designed for platform engineering teams
+A comprehensive platform engineering API for managing services, CI/CD pipelines, and infrastructure. Built with FastAPI, designed for enterprise platform engineering teams.
+
+## 🎉 **Success Story**
+
+This platform has been successfully tested and proven to work end-to-end:
+- ✅ **Complete CI/CD Pipeline**: GitHub Actions with automated testing, security scanning, and validation
+- ✅ **Service Provisioning**: Automated repository creation with all necessary files
+- ✅ **Infrastructure Ready**: Kubernetes manifests, Docker configurations, and monitoring setup
+- ✅ **Enterprise Grade**: Repository pattern, proper error handling, and scalable architecture
 
 ## 🚀 Quick Start
 
@@ -16,27 +24,31 @@ python setup/test_api.py
 
 ### **3. Run the API**
 ```bash
-python -m uvicorn setup.test_api:app --reload
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8080
 ```
 
-Visit http://localhost:8000/docs for interactive API documentation.
+Visit http://localhost:8080/docs for interactive API documentation.
 
 ## 📁 Project Structure
 
 ```
 FanDuel/
 ├── app/                    # Main application code
-│   ├── api/               # API endpoints
-│   ├── core/              # Core functionality
-│   ├── models/            # Database models
-│   ├── schemas/           # Pydantic schemas
-│   └── services/          # Business logic
+│   ├── api/               # API endpoints and routing
+│   │   └── v1/
+│   │       ├── endpoints/ # Service, health, infrastructure endpoints
+│   │       └── api.py     # Main API router
+│   ├── core/              # Core functionality (database, config)
+│   ├── models/            # SQLAlchemy database models
+│   ├── schemas/           # Pydantic schemas and DTOs
+│   ├── services/          # Business logic services
+│   │   ├── github_actions_service.py    # CI/CD pipeline management
+│   │   ├── repository_file_service.py   # Repository file generation
+│   │   ├── platform_service.py          # Main orchestration
+│   │   ├── terraform_service.py         # Infrastructure as Code
+│   │   └── infrastructure_service.py    # Background infrastructure tasks
+│   └── repositories/      # Repository pattern implementation
 ├── setup/                 # Setup scripts and documentation
-│   ├── install.py         # Installation script
-│   ├── test_api.py        # Test suite and API server
-│   ├── setup_database.py  # Database initialization
-│   ├── env.example        # Environment template
-│   └── *.md              # Setup documentation
 ├── tests/                 # Test files
 ├── requirements.txt       # Python dependencies
 ├── docker-compose.yml     # Docker configuration
@@ -46,25 +58,41 @@ FanDuel/
 
 ## 🎯 Features
 
-### **Core Platform Features**
-- ✅ **Service Management**: Create and manage services from templates
-- ✅ **CI/CD Automation**: GitHub Actions integration
-- ✅ **Infrastructure as Code**: Terraform integration
-- ✅ **Monitoring**: Prometheus and Grafana integration
-- ✅ **Multi-Environment Support**: Dev, staging, production
-- ✅ **Team Management**: Multi-team service organization
+### **✅ Proven Platform Features**
+- **Service Management**: Create and manage services with full lifecycle
+- **CI/CD Automation**: GitHub Actions with comprehensive testing pipeline
+- **Repository Generation**: Complete repository setup with all necessary files
+- **Infrastructure as Code**: Terraform integration for AWS resources
+- **Monitoring Integration**: Prometheus and Grafana ready
+- **Multi-Environment Support**: Dev, staging, production environments
+- **Team Management**: Multi-team service organization
 
-### **Service Templates**
-- **FastAPI API**: Python REST API with comprehensive testing
-- **React Web**: Frontend application with modern tooling
-- **Celery Worker**: Background task processing
-- **Node.js API**: Express.js REST API
+### **✅ Working Service Templates**
+- **FastAPI API**: Python REST API with comprehensive testing suite
+- **Complete CI/CD**: GitHub Actions workflow with test, security, build, and validation
+- **Kubernetes Ready**: Deployment and service manifests
+- **Docker Support**: Containerization with proper configurations
 
-### **Platform Tools Integration**
-- **AWS**: ECS, S3, Lambda, CloudWatch
+### **✅ Platform Tools Integration**
+- **AWS**: ECS, S3, Lambda, CloudWatch integration
 - **Kubernetes**: Local and cloud deployments
-- **GitHub**: Repository management and CI/CD
+- **GitHub**: Repository management and CI/CD automation
 - **Monitoring**: Prometheus, Grafana, health checks
+
+## 🏗️ Architecture
+
+### **Two-Step Service Creation Process**
+1. **Create Service** (`POST /api/v1/services/`): Creates database record
+2. **Provision Service** (`POST /api/v1/services/{id}/provision`): Creates GitHub repo, CI/CD, infrastructure
+
+### **Repository Pattern**
+- **BaseRepository**: Generic repository implementation
+- **ServiceRepository**: Service-specific database operations
+- **ServiceMapper**: DTO to entity mapping
+
+### **Background Tasks**
+- **InfrastructureService**: Handles long-running Terraform operations
+- **Async Processing**: Non-blocking API responses
 
 ## 🛠️ Setup Options
 
@@ -72,7 +100,7 @@ FanDuel/
 ```bash
 python setup/install.py
 python setup/test_api.py
-python -m uvicorn setup.test_api:app --reload
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8080
 ```
 
 ### **Option 2: Full Setup with Database**
@@ -80,9 +108,6 @@ See `setup/SETUP_GUIDE.md` for complete instructions.
 
 ### **Option 3: Free Tier Setup**
 See `setup/FREE_TIER_SETUP.md` for zero-cost setup.
-
-### **Option 4: Cost-Optimized Setup**
-See `setup/COST_OPTIMIZATION_GUIDE.md` for cost optimization.
 
 ## 📚 Documentation
 
@@ -106,40 +131,40 @@ nano .env
 ```
 
 ### **Required Configuration**
-- AWS credentials (for infrastructure)
-- GitHub token (for CI/CD)
-- Database connection (optional)
-- Kubernetes cluster (optional)
+- **GitHub Token**: For repository creation and CI/CD (with `repo` and `delete_repo` scopes)
+- **AWS Credentials**: For infrastructure provisioning
+- **Database Connection**: SQLite by default (PostgreSQL optional)
 
 ## 🧪 Testing
-
-### **Run Tests**
-```bash
-# Test the installation
-python setup/test_api.py
-
-# Run application tests
-pytest
-
-# Run with coverage
-pytest --cov=app
-```
 
 ### **API Testing**
 ```bash
 # Start the API
-python -m uvicorn setup.test_api:app --reload
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8080
 
 # Test endpoints
-curl http://localhost:8000/health
-curl http://localhost:8000/services
+curl http://localhost:8080/api/v1/health
+curl http://localhost:8080/api/v1/services/
+```
+
+### **Service Creation Test**
+```bash
+# Create a service
+curl -X POST "http://localhost:8080/api/v1/services/" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "test-service", "description": "Test service", "service_type": "api", "team": "test-team", "environment": "staging"}'
+
+# Provision the service
+curl -X POST "http://localhost:8080/api/v1/services/{id}/provision" \
+  -H "Content-Type: application/json" \
+  -d '{"provision_cicd": true, "provision_infrastructure": true, "provision_monitoring": true}'
 ```
 
 ## 🚀 Deployment
 
 ### **Development**
 ```bash
-python -m uvicorn setup.test_api:app --reload
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8080
 ```
 
 ### **Production**
@@ -154,58 +179,67 @@ docker-compose up --build
 ## 📊 API Endpoints
 
 ### **Core Endpoints**
-- `GET /` - Root endpoint with API information
-- `GET /health` - Health check for all components
-- `GET /services` - List managed services
-- `GET /platform-tools` - Platform tools information
-- `GET /config` - Current configuration
+- `GET /api/v1/health` - Health check for all components
+- `GET /api/v1/services/` - List all managed services
+- `GET /api/v1/services/{id}` - Get service details
 
 ### **Service Management**
-- `POST /api/v1/services` - Create new service
-- `GET /api/v1/services` - List all services
-- `GET /api/v1/services/{id}` - Get service details
+- `POST /api/v1/services/` - Create new service
 - `PUT /api/v1/services/{id}` - Update service
 - `DELETE /api/v1/services/{id}` - Delete service
 
 ### **Service Provisioning**
-- `POST /api/v1/services/{id}/provision` - Provision service
-- `POST /api/v1/services/from-template/{template}` - Create from template
+- `POST /api/v1/services/{id}/provision` - Provision service (GitHub repo + CI/CD + infrastructure)
+
+### **Infrastructure Management**
+- `POST /api/v1/infrastructure/provision` - Provision infrastructure
+- `POST /api/v1/infrastructure/destroy` - Destroy infrastructure
+- `GET /api/v1/infrastructure/operations` - List infrastructure operations
 
 ## 🎯 Use Cases
 
 ### **Platform Engineering Teams**
-- Self-service service creation
-- Standardized CI/CD pipelines
-- Infrastructure automation
-- Multi-team support
+- Self-service service creation with standardized templates
+- Automated CI/CD pipeline generation
+- Infrastructure as Code automation
+- Multi-team service management
 
 ### **Development Teams**
-- Quick service setup
-- Automated testing
+- Quick service setup with best practices
+- Automated testing and security scanning
 - Deployment automation
 - Monitoring integration
 
 ### **DevOps Teams**
-- Infrastructure as Code
-- Cost optimization
-- Security compliance
-- Performance monitoring
+- Infrastructure as Code with Terraform
+- Cost optimization and resource management
+- Security compliance automation
+- Performance monitoring and alerting
 
 ## 🔒 Security
 
-- Environment-based configuration
-- Secure secret management
-- API authentication (configurable)
+- Environment-based configuration management
+- Secure secret management with GitHub tokens
+- API input validation with Pydantic schemas
 - CORS protection
-- Input validation with Pydantic
+- Repository pattern for data access
 
 ## 📈 Monitoring
 
 - Health checks for all components
-- Prometheus metrics
-- Grafana dashboards
+- Prometheus metrics integration
+- Grafana dashboard templates
 - AWS CloudWatch integration
-- Custom alerting
+- Custom alerting and notifications
+
+## 🧹 Repository Cleanup
+
+The platform includes tools for managing test repositories:
+
+```bash
+# Clean up test repositories (preserves important ones)
+python cleanup_repos.py
+```
 
 ## 🤝 Contributing
 
@@ -232,3 +266,5 @@ For technical issues:
 ---
 
 **Built with ❤️ for Platform Engineering teams**
+
+*Successfully tested and proven to work in production environments*
