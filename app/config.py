@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     # Application Settings
     app_name: str = "Platform Engineering API"
     debug: bool = True
-    secret_key: str = "your-secret-key-here-change-in-production"
+    secret_key: str = ""
     host: str = "0.0.0.0"
     port: int = 8000
     
@@ -46,13 +46,17 @@ class Settings(BaseSettings):
     vpc_id: str = ""
     public_subnet_id: str = ""
     private_subnet_id: str = ""
+    subnet_public_id: str = ""
+    subnet_private_id: str = ""
+    routetable_public_id: str = ""
+    routetable_private_id: str = ""
     
     # GitHub Actions Settings
     github_token: str = ""
     github_organization: str = "platformdavid"
     
     # Terraform Settings
-    terraform_workspace_dir: str = "/tmp/terraform"
+    terraform_workspace_dir: str = "C:/tmp/terraform"
     
     # Kubernetes Settings
     k8s_namespace: str = "platform-engineering"

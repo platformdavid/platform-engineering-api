@@ -49,7 +49,7 @@ class TerraformService:
             # Write Terraform files
             self._write_terraform_files(service_name, terraform_config)
             
-            # Run Terraform
+            # Run Terraform apply
             result = await self._run_terraform(service_name, "apply")
             
             if result["status"] == "success":
@@ -58,7 +58,9 @@ class TerraformService:
                     "message": "Cost-optimized infrastructure created",
                     "outputs": result.get("outputs", {}),
                     "cost_breakdown": self._get_cost_breakdown(service_type),
-                    "estimated_monthly_cost": "$5-15"
+                    "estimated_monthly_cost": "$5-15",
+                    "terraform_state": "applied",
+                    "cleanup_command": f"terraform destroy -auto-approve -chdir={self.workspace_dir}/{service_name}"
                 }
             else:
                 return {
@@ -393,14 +395,38 @@ output "cost_optimization" {{
             f.write(outputs_tf)
 
     def _dict_to_hcl(self, data: Dict[str, Any]) -> str:
-        """Convert dictionary to HCL format (simplified)."""
-        # This is a simplified HCL conversion
-        # In a real implementation, you'd use a proper HCL library
-        return json.dumps(data, indent=2)
+        """Convert dictionary to HCL format."""
+        def _convert_value(value, indent=0):
+            if isinstance(value, dict):
+                items = []
+                for k, v in value.items():
+                    if isinstance(v, dict):
+                        items.append(f"{'  ' * indent}{k} {{\n{_convert_value(v, indent + 1)}\n{'  ' * indent}}}")
+                    elif isinstance(v, list):
+                        items.append(f"{'  ' * indent}{k} = {_convert_value(v, indent)}")
+                    elif isinstance(v, str) and v.startswith("${{"):
+                        items.append(f"{'  ' * indent}{k} = {v}")
+                    else:
+                        items.append(f"{'  ' * indent}{k} = {json.dumps(v)}")
+                return "\n".join(items)
+            elif isinstance(value, list):
+                return "[" + ", ".join(json.dumps(v) for v in value) + "]"
+            else:
+                return json.dumps(value)
+        
+        hcl_parts = []
+        for resource_type, resources in data.items():
+            for resource_name, resource_config in resources.items():
+                hcl_parts.append(f'{resource_type} "{resource_name}" {{\n{_convert_value(resource_config, 1)}\n}}')
+        
+        return "\n\n".join(hcl_parts)
 
     async def _run_terraform(self, service_name: str, command: str) -> Dict[str, Any]:
         """Run Terraform command."""
         service_dir = Path(self.workspace_dir) / service_name
+        
+        # Use local terraform executable
+        terraform_path = Path(__file__).parent.parent.parent / "tools" / "terraform.exe"
         
         try:
             # Set environment variables
@@ -409,7 +435,7 @@ output "cost_optimization" {{
             # Run terraform init
             if command == "apply":
                 init_result = subprocess.run(
-                    ["terraform", "init"],
+                    [str(terraform_path), "init"],
                     cwd=service_dir,
                     env=env,
                     capture_output=True,
@@ -423,7 +449,7 @@ output "cost_optimization" {{
 
             # Run terraform command
             result = subprocess.run(
-                ["terraform", command, "-auto-approve"],
+                [str(terraform_path), command, "-auto-approve"],
                 cwd=service_dir,
                 env=env,
                 capture_output=True,

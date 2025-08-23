@@ -1,1 +1,0 @@
-# Repository pattern for data access layer

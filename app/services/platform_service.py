@@ -225,6 +225,18 @@ class PlatformService:
         """
         return await self.service_repository.get_by_id(service_id)
 
+    async def get_service_by_name(self, service_name: str) -> Optional[Service]:
+        """
+        Get service by name.
+
+        Args:
+            service_name: Service name
+
+        Returns:
+            Optional[Service]: Service if found, None otherwise
+        """
+        return await self.service_repository.get_by_name(service_name)
+
     async def get_services_by_team(self, team: str, skip: int = 0, limit: int = 100) -> List[Service]:
         """
         Get services by team with pagination.

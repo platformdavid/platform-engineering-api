@@ -44,7 +44,7 @@ async def create_service(
         HTTPException: If service already exists
     """
     platform_service = PlatformService(db)
-    existing_service = await platform_service.get_service_by_id(service_in.name)
+    existing_service = await platform_service.get_service_by_name(service_in.name)
     
     if existing_service:
         raise HTTPException(

@@ -177,3 +177,45 @@ async def cleanup_operations(
         "cleaned_count": cleaned_count,
         "max_age_hours": max_age_hours
     }
+
+
+@router.post("/destroy/{service_name}")
+async def destroy_service_infrastructure(
+    service_name: str,
+    environment: str = "staging",
+    db: AsyncSession = Depends(get_db)
+) -> Dict[str, Any]:
+    """
+    Destroy infrastructure for a specific service.
+    
+    This will tear down all AWS resources to save costs.
+    
+    Args:
+        service_name: Name of the service to destroy
+        environment: Environment (dev, staging, prod)
+        db: Database session
+        
+    Returns:
+        Dict containing destruction results
+    """
+    try:
+        # Run terraform destroy
+        terraform_service = TerraformService()
+        result = await terraform_service.destroy_infrastructure(service_name, environment)
+        
+        return {
+            "status": "success",
+            "message": f"Infrastructure destroyed for {service_name}",
+            "service_name": service_name,
+            "environment": environment,
+            "cost_savings": "100% - no ongoing charges",
+            "details": result
+        }
+        
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"Failed to destroy infrastructure: {str(e)}",
+            "service_name": service_name,
+            "environment": environment
+        }
