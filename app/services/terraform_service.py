@@ -32,6 +32,9 @@ class TerraformService:
         self.workspace_dir = settings.terraform_workspace_dir
         self.aws_region = settings.aws_region
         self.organization = settings.platform_organization
+        self.vpc_id = settings.vpc_id
+        self.public_subnet_id = settings.public_subnet_id
+        self.private_subnet_id = settings.private_subnet_id
 
     async def create_infrastructure(self, service_name: str, service_type: str, environment: str) -> Dict[str, Any]:
         """
@@ -134,6 +137,46 @@ class TerraformService:
     def _generate_cost_optimized_api_resources(self, service_name: str, environment: str) -> Dict[str, Any]:
         """Generate cost-optimized resources for API services."""
         return {
+            "aws_security_group": {
+                f"{service_name}_sg": {
+                    "name": f"{service_name}-{environment}-sg",
+                    "description": f"Security group for {service_name} {environment}",
+                    "vpc_id": self.vpc_id,
+                    "ingress": [
+                        {
+                            "description": "HTTP",
+                            "from_port": 80,
+                            "to_port": 80,
+                            "protocol": "tcp",
+                            "cidr_blocks": ["0.0.0.0/0"]
+                        },
+                        {
+                            "description": "HTTPS",
+                            "from_port": 443,
+                            "to_port": 443,
+                            "protocol": "tcp",
+                            "cidr_blocks": ["0.0.0.0/0"]
+                        },
+                        {
+                            "description": "API Port",
+                            "from_port": 8000,
+                            "to_port": 8000,
+                            "protocol": "tcp",
+                            "cidr_blocks": ["0.0.0.0/0"]
+                        }
+                    ],
+                    "egress": [
+                        {
+                            "description": "All outbound",
+                            "from_port": 0,
+                            "to_port": 0,
+                            "protocol": "-1",
+                            "cidr_blocks": ["0.0.0.0/0"]
+                        }
+                    ],
+                    "tags": "${local.tags}"
+                }
+            },
             "aws_ecs_cluster": {
                 f"{service_name}_cluster": {
                     "name": f"{service_name}-{environment}",
@@ -190,8 +233,8 @@ class TerraformService:
                         }
                     ],
                     "network_configuration": {
-                        "subnets": ["subnet-12345678"],  # Use existing subnet
-                        "security_groups": ["sg-12345678"],  # Use existing security group
+                        "subnets": [self.public_subnet_id],  # Use configured public subnet
+                        "security_groups": [f"${{aws_security_group.{service_name}_sg.id}}"],  # Reference security group
                         "assign_public_ip": True
                     },
                     "tags": "${local.tags}"
@@ -306,6 +349,24 @@ variable "service_name" {{
   description = "Service name"
   type        = string
   default     = "{service_name}"
+}}
+
+variable "vpc_id" {{
+  description = "VPC ID"
+  type        = string
+  default     = "{self.vpc_id}"
+}}
+
+variable "public_subnet_id" {{
+  description = "Public subnet ID"
+  type        = string
+  default     = "{self.public_subnet_id}"
+}}
+
+variable "private_subnet_id" {{
+  description = "Private subnet ID"
+  type        = string
+  default     = "{self.private_subnet_id}"
 }}
 """
         with open(service_dir / "variables.tf", "w") as f:

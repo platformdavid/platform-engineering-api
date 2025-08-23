@@ -15,7 +15,7 @@ from app.schemas.service import ServiceCreate, ServiceUpdate, ServiceProvision
 from app.repositories.service_repository import ServiceRepository
 from app.mappers.service_mapper import ServiceMapper
 from app.services.github_actions_service import GitHubActionsService
-from app.services.terraform_service import TerraformService
+from app.services.infrastructure_service import InfrastructureService
 from app.services.kubernetes_service import KubernetesService
 
 
@@ -37,7 +37,7 @@ class PlatformService:
         self.db = db
         self.service_repository = ServiceRepository(db)
         self.github_actions_service = GitHubActionsService()
-        self.terraform_service = TerraformService()
+        self.infrastructure_service = InfrastructureService()
         self.kubernetes_service = KubernetesService()
 
     async def create_service(self, service_in: ServiceCreate) -> Service:
@@ -153,37 +153,21 @@ class PlatformService:
             service: Service to provision infrastructure for
         """
         try:
-            # Create infrastructure with Terraform
-            terraform_result = await self.terraform_service.create_infrastructure(
-                service_name=service.name,
-                service_type=service.service_type.value,
-                environment=service.environment.value
-            )
+            # Note: Infrastructure provisioning is now handled by background tasks
+            # through the infrastructure endpoints. This method now just updates
+            # the service status to indicate infrastructure provisioning is initiated.
+            
+            # Update infrastructure status to indicate provisioning started
+            service.infrastructure_status = "provisioning"
+            service.deployment_url = f"http://{service.name}.{service.environment.value}.platformdavid.com"
+            
+            # Store infrastructure information
+            service.infrastructure_config.update({
+                "provisioning_method": "background_task",
+                "status": "initiated"
+            })
 
-            if terraform_result["status"] == "success":
-                # Create Kubernetes deployment
-                k8s_result = await self.kubernetes_service.create_deployment(
-                    service_name=service.name,
-                    service_type=service.service_type.value,
-                    environment=service.environment.value
-                )
-
-                if k8s_result["status"] == "success":
-                    # Update infrastructure status
-                    service.infrastructure_status = "provisioned"
-                    service.deployment_url = f"http://{service.name}.{service.environment.value}.platformdavid.com"
-
-                    # Store infrastructure information
-                    service.infrastructure_config.update({
-                        "terraform_outputs": terraform_result.get("outputs", {}),
-                        "kubernetes_deployment": k8s_result.get("output", "")
-                    })
-
-                    await self.db.commit()
-                else:
-                    raise Exception(f"Kubernetes deployment failed: {k8s_result.get('error', 'Unknown error')}")
-            else:
-                raise Exception(f"Terraform provisioning failed: {terraform_result.get('message', 'Unknown error')}")
+            await self.db.commit()
 
         except Exception as e:
             service.infrastructure_status = "failed"

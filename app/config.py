@@ -36,14 +36,19 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     
     # AWS Settings
-    aws_access_key_id: str = "your-aws-access-key"
-    aws_secret_access_key: str = "your-aws-secret-key"
+    aws_access_key_id: str = ""
+    aws_secret_access_key: str = ""
     aws_region: str = "eu-west-2"
     aws_profile: str = "default"
-    aws_s3_bucket: str = "your-s3-bucket"
+    aws_s3_bucket: str = ""
+    
+    # VPC Settings
+    vpc_id: str = ""
+    public_subnet_id: str = ""
+    private_subnet_id: str = ""
     
     # GitHub Actions Settings
-    github_token: str = "your-github-token"
+    github_token: str = ""
     github_organization: str = "platformdavid"
     
     # Terraform Settings
