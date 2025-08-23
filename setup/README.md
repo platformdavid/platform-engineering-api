@@ -13,9 +13,10 @@ This folder contains essential setup files for the Platform Engineering API.
 - `env.example` - Environment variables template
 
 ### **Documentation**
-- `SETUP_STEP_BY_STEP.md` - Complete setup guide
-- `FREE_TIER_SETUP.md` - Free tier setup guide
-- `COST_OPTIMIZATION_GUIDE.md` - Cost optimization strategies
+- `guides/` - Setup documentation folder
+  - `SETUP_STEP_BY_STEP.md` - Complete setup guide
+  - `FREE_TIER_SETUP.md` - Free tier setup guide
+  - `COST_OPTIMIZATION_GUIDE.md` - Cost optimization strategies
 
 ## 🚀 Quick Start
 
@@ -42,16 +43,16 @@ python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8080
 3. Start the API with `python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8080`
 
 ### **Option 2: Full Setup with Database**
-1. Follow `SETUP_STEP_BY_STEP.md`
+1. Follow `guides/SETUP_STEP_BY_STEP.md`
 2. Run `python setup/setup_database.py`
 3. Configure environment variables using `env.example`
 
 ### **Option 3: Free Tier Setup**
-1. Follow `FREE_TIER_SETUP.md` for zero-cost setup
+1. Follow `guides/FREE_TIER_SETUP.md` for zero-cost setup
 2. Use local tools instead of cloud services
 
 ### **Option 4: Cost-Optimized Setup**
-1. Follow `COST_OPTIMIZATION_GUIDE.md`
+1. Follow `guides/COST_OPTIMIZATION_GUIDE.md`
 2. Minimize AWS costs while maintaining functionality
 
 ## 🔧 Environment Configuration
@@ -64,9 +65,9 @@ cp setup/env.example .env
 
 ## 📚 Documentation
 
-- **`SETUP_STEP_BY_STEP.md`** - Complete setup guide with troubleshooting
-- **`FREE_TIER_SETUP.md`** - How to set up everything for free
-- **`COST_OPTIMIZATION_GUIDE.md`** - Cost optimization strategies
+- **`guides/SETUP_STEP_BY_STEP.md`** - Complete setup guide with troubleshooting
+- **`guides/FREE_TIER_SETUP.md`** - How to set up everything for free
+- **`guides/COST_OPTIMIZATION_GUIDE.md`** - Cost optimization strategies
 
 ## 🎯 Next Steps
 
