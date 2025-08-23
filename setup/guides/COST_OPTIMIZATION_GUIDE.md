@@ -4,7 +4,7 @@ This guide shows you how to use AWS **beyond the free tier** while keeping costs
 
 ## 🎯 Cost Optimization Strategy
 
-**Why Cost Optimization?** This demonstrates **financial responsibility** - a key skill for platform engineers at companies like FanDuel!
+**Why Cost Optimization?** This demonstrates **financial responsibility** - a key skill for platform engineers!
 
 ### **Cost Breakdown: $5-15/month vs $50-100/month**
 
@@ -42,7 +42,6 @@ resource "aws_ecs_service" "api_service" {
 - ✅ **Fargate Spot**: 70% cheaper than on-demand
 - ✅ **Minimal Resources**: 256 CPU units, 512MB RAM
 - ✅ **Single Replica**: Start with 1, scale up as needed
-- ✅ **Container Insights Disabled**: Save monitoring costs
 
 ### **2. Web Services: S3 Static Hosting**
 
@@ -67,7 +66,6 @@ resource "aws_s3_bucket_website_configuration" "web_site" {
 - ✅ **S3 Static Hosting**: $0.023 per GB stored
 - ✅ **No EC2 Instances**: Eliminate compute costs
 - ✅ **No Load Balancers**: Eliminate ALB costs
-- ✅ **Minimal Data Transfer**: Static content is cached
 
 ### **3. Worker Services: Lambda Serverless**
 
@@ -90,12 +88,10 @@ resource "aws_lambda_function" "worker" {
 - ✅ **Pay Per Request**: $0.20 per 1M requests
 - ✅ **Minimal Memory**: 128MB (minimum)
 - ✅ **Short Timeouts**: 30 seconds max
-- ✅ **Auto-scaling**: No idle costs
 
 ## 📊 Detailed Cost Breakdown
 
 ### **API Service Costs ($5-13/month)**
-
 ```bash
 # ECS Fargate Spot (1 replica)
 - CPU: 256 units × $0.00001406/second = $0.30/day = $9/month
@@ -106,15 +102,10 @@ resource "aws_lambda_function" "worker" {
 - Log Storage: 1GB × $0.50/GB = $0.50/month
 - Log Ingestion: 1GB × $0.50/GB = $0.50/month
 
-# Data Transfer
-- In: Free (first 1GB)
-- Out: 1GB × $0.09/GB = $0.09/month
-
 Total: $4-9/month
 ```
 
 ### **Web Service Costs ($0.50-2/month)**
-
 ```bash
 # S3 Storage
 - Static Assets: 100MB × $0.023/GB = $0.002/month
@@ -125,14 +116,10 @@ Total: $4-9/month
 # Data Transfer
 - Out: 1GB × $0.09/GB = $0.09/month
 
-# CloudFront (optional)
-- Requests: 10K × $0.0075/10K = $0.075/month
-
 Total: $0.10-0.20/month
 ```
 
 ### **Worker Service Costs ($0.80-2.50/month)**
-
 ```bash
 # Lambda Requests
 - 1M requests × $0.20/1M = $0.20/month
@@ -140,29 +127,21 @@ Total: $0.10-0.20/month
 # Lambda Duration
 - 1M seconds × $0.0000166667/second = $0.17/month
 
-# CloudWatch Logs
-- Log Storage: 100MB × $0.50/GB = $0.05/month
-
 Total: $0.42/month
 ```
 
 ## 🛠️ Implementation Guide
 
 ### **1. Environment Setup**
-
 ```bash
 # Update your .env with cost-optimized settings
 AWS_REGION=eu-west-2  # Cheapest region
-AWS_PROFILE=default
-
-# Cost optimization flags
 ENABLE_SPOT_INSTANCES=true
 ENABLE_SERVERLESS=true
 MINIMAL_RESOURCES=true
 ```
 
 ### **2. Terraform Configuration**
-
 ```bash
 # Use cost-optimized Terraform
 terraform init
@@ -171,7 +150,6 @@ terraform apply
 ```
 
 ### **3. Cost Monitoring**
-
 ```bash
 # Set up AWS Cost Explorer alerts
 aws ce create-anomaly-monitor \
@@ -196,7 +174,6 @@ aws budgets create-budget \
 ## 🎯 Cost Optimization Best Practices
 
 ### **1. Resource Sizing**
-
 ```hcl
 # Start with minimum resources
 resource "aws_ecs_task_definition" "api" {
@@ -212,7 +189,6 @@ resource "aws_appautoscaling_target" "api" {
 ```
 
 ### **2. Spot Instance Strategy**
-
 ```hcl
 # Use spot instances for cost savings
 capacity_provider_strategy {
@@ -229,7 +205,6 @@ capacity_provider_strategy {
 ```
 
 ### **3. Log Retention**
-
 ```hcl
 # Keep logs for minimum time to save costs
 resource "aws_cloudwatch_log_group" "logs" {
@@ -238,7 +213,6 @@ resource "aws_cloudwatch_log_group" "logs" {
 ```
 
 ### **4. Auto-scaling Policies**
-
 ```hcl
 # Conservative scaling to avoid costs
 resource "aws_appautoscaling_policy" "scale_up" {
@@ -250,31 +224,9 @@ resource "aws_appautoscaling_policy" "scale_up" {
 }
 ```
 
-## 📈 Scaling Strategy
-
-### **Horizontal Scaling (Cost-Effective)**
-
-```hcl
-# Scale horizontally with spot instances
-resource "aws_ecs_service" "api" {
-  desired_count = 1  # Start with 1
-  
-  # Auto-scale based on CPU
-  depends_on = [aws_appautoscaling_target.api]
-}
-```
-
-### **Vertical Scaling (Avoid)**
-
-```hcl
-# Don't scale vertically (more expensive)
-# Instead, scale horizontally with more small instances
-```
-
 ## 🔍 Cost Monitoring
 
 ### **1. AWS Cost Explorer**
-
 ```bash
 # Get daily cost breakdown
 aws ce get-cost-and-usage \
@@ -285,7 +237,6 @@ aws ce get-cost-and-usage \
 ```
 
 ### **2. CloudWatch Billing Alarms**
-
 ```hcl
 # Set up billing alarms
 resource "aws_cloudwatch_metric_alarm" "billing" {
@@ -304,7 +255,6 @@ resource "aws_cloudwatch_metric_alarm" "billing" {
 ## 🚨 Cost Alert Setup
 
 ### **1. Budget Alerts**
-
 ```bash
 # Create budget with alerts
 aws budgets create-budget \
@@ -336,35 +286,21 @@ aws budgets create-budget \
   ]'
 ```
 
-### **2. Cost Anomaly Detection**
-
-```bash
-# Enable cost anomaly detection
-aws ce create-anomaly-monitor \
-  --anomaly-monitor '{
-    "MonitorType": "DIMENSIONAL",
-    "DimensionalValueCount": 10
-  }'
-```
-
 ## 💡 Cost Optimization Tips
 
 ### **1. Use Reserved Instances (if staying long-term)**
-
 ```bash
 # For long-term usage, consider reserved instances
 # But for a test, stick with spot instances
 ```
 
 ### **2. Clean Up Unused Resources**
-
 ```bash
 # Regular cleanup script
 aws ec2 describe-instances --filters "Name=instance-state-name,Values=stopped" --query 'Reservations[].Instances[].InstanceId' --output text | xargs -I {} aws ec2 terminate-instances --instance-ids {}
 ```
 
 ### **3. Use AWS Cost Optimization Tools**
-
 ```bash
 # Enable AWS Cost Explorer
 aws ce get-cost-and-usage --time-period Start=2024-01-01,End=2024-01-31 --granularity MONTHLY --metrics BlendedCost

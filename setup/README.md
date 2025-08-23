@@ -1,21 +1,19 @@
 # Setup Documentation
 
-This folder contains all setup-related files for the Platform Engineering API.
+This folder contains essential setup files for the Platform Engineering API.
 
-## 📁 Files Overview
+## 📁 Essential Files
 
-### **Installation Scripts**
+### **Installation & Testing**
 - `install.py` - Main installation script for all dependencies
 - `test_api.py` - Test suite and API server for verification
-- `setup.py` - Legacy setup script (alternative to install.py)
 - `setup_database.py` - Database initialization script
 
 ### **Configuration**
 - `env.example` - Environment variables template
 
 ### **Documentation**
-- `SETUP_GUIDE.md` - Main setup guide
-- `SETUP_STEP_BY_STEP.md` - Detailed step-by-step instructions
+- `SETUP_STEP_BY_STEP.md` - Complete setup guide
 - `FREE_TIER_SETUP.md` - Free tier setup guide
 - `COST_OPTIMIZATION_GUIDE.md` - Cost optimization strategies
 
@@ -33,7 +31,7 @@ python setup/test_api.py
 
 ### **3. Run the API**
 ```bash
-python -m uvicorn setup.test_api:app --reload
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8080
 ```
 
 ## 📋 Setup Options
@@ -41,10 +39,10 @@ python -m uvicorn setup.test_api:app --reload
 ### **Option 1: Simple Setup (Recommended)**
 1. Run `python setup/install.py`
 2. Run `python setup/test_api.py`
-3. Start the API with `python -m uvicorn setup.test_api:app --reload`
+3. Start the API with `python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8080`
 
 ### **Option 2: Full Setup with Database**
-1. Follow `SETUP_GUIDE.md`
+1. Follow `SETUP_STEP_BY_STEP.md`
 2. Run `python setup/setup_database.py`
 3. Configure environment variables using `env.example`
 
@@ -66,15 +64,14 @@ cp setup/env.example .env
 
 ## 📚 Documentation
 
-- **`SETUP_GUIDE.md`** - Main setup guide with troubleshooting
-- **`SETUP_STEP_BY_STEP.md`** - Detailed instructions for complete setup
+- **`SETUP_STEP_BY_STEP.md`** - Complete setup guide with troubleshooting
 - **`FREE_TIER_SETUP.md`** - How to set up everything for free
 - **`COST_OPTIMIZATION_GUIDE.md`** - Cost optimization strategies
 
 ## 🎯 Next Steps
 
 After setup, you can:
-1. Explore the API at http://localhost:8000/docs
+1. Explore the API at http://localhost:8080/docs
 2. Create services using the platform
 3. Set up CI/CD pipelines
 4. Configure monitoring and alerts

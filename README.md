@@ -49,6 +49,14 @@ FanDuel/
 │   │   └── infrastructure_service.py    # Background infrastructure tasks
 │   └── repositories/      # Repository pattern implementation
 ├── setup/                 # Setup scripts and documentation
+│   ├── install.py         # Main installation script
+│   ├── test_api.py        # Test suite and API server
+│   ├── setup_database.py  # Database initialization
+│   ├── env.example        # Environment template
+│   ├── README.md          # Setup folder overview
+│   ├── SETUP_STEP_BY_STEP.md    # Complete setup guide
+│   ├── FREE_TIER_SETUP.md       # Free tier setup guide
+│   └── COST_OPTIMIZATION_GUIDE.md # Cost optimization strategies
 ├── tests/                 # Test files
 ├── requirements.txt       # Python dependencies
 ├── docker-compose.yml     # Docker configuration
@@ -104,18 +112,20 @@ python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8080
 ```
 
 ### **Option 2: Full Setup with Database**
-See `setup/SETUP_GUIDE.md` for complete instructions.
+See `setup/SETUP_STEP_BY_STEP.md` for complete instructions.
 
 ### **Option 3: Free Tier Setup**
 See `setup/FREE_TIER_SETUP.md` for zero-cost setup.
+
+### **Option 4: Cost-Optimized Setup**
+See `setup/COST_OPTIMIZATION_GUIDE.md` for cost optimization.
 
 ## 📚 Documentation
 
 All setup documentation is organized in the `setup/` folder:
 
 - **`setup/README.md`** - Setup folder overview
-- **`setup/SETUP_GUIDE.md`** - Main setup guide
-- **`setup/SETUP_STEP_BY_STEP.md`** - Detailed instructions
+- **`setup/SETUP_STEP_BY_STEP.md`** - Complete setup guide
 - **`setup/FREE_TIER_SETUP.md`** - Free setup guide
 - **`setup/COST_OPTIMIZATION_GUIDE.md`** - Cost optimization
 

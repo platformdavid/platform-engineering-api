@@ -10,7 +10,7 @@ scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
   - job_name: 'platform-engineering-api'
     static_configs:
-      - targets: ['localhost:8000']
+      - targets: ['localhost:8080']
     metrics_path: '/metrics'
     scrape_interval: 5s
 
