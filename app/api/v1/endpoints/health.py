@@ -1,5 +1,5 @@
 """
-Health check endpoints for the FanDuel Platform Engineering API.
+Health check endpoints for the PlatformDavid Platform Engineering API.
 
 This module provides health check endpoints for monitoring and deployment.
 """
@@ -24,7 +24,7 @@ async def health_check() -> Any:
     """
     return {
         "status": "healthy",
-        "service": "FanDuel Platform Engineering API",
+        "service": "PlatformDavid Platform Engineering API",
         "version": "1.0.0"
     }
 

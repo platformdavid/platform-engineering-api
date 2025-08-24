@@ -1,4 +1,4 @@
-# FanDuel Platform Engineering API
+# PlatformDavid Platform Engineering API
 
 A comprehensive platform engineering API for managing services, CI/CD pipelines, and infrastructure. Built with FastAPI, designed for enterprise platform engineering teams.
 
@@ -32,7 +32,7 @@ Visit http://localhost:8080/docs for interactive API documentation.
 ## 📁 Project Structure
 
 ```
-FanDuel/
+PlatformDavid/
 ├── app/                    # Main application code
 │   ├── api/               # API endpoints and routing
 │   │   └── v1/

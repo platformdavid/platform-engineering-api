@@ -315,7 +315,7 @@ aws ce get-cost-and-usage --time-period Start=2024-01-01,End=2024-01-31 --granul
 - ✅ **Monitoring**: Cost tracking and alerts
 - ✅ **Best Practices**: Industry-standard cost optimization
 
-**This shows FanDuel's Platform Engineering team that you understand:**
+**This shows PlatformDavid's Platform Engineering team that you understand:**
 - **Cost management** in production environments
 - **Resource optimization** for maximum efficiency
 - **Financial responsibility** in infrastructure decisions

@@ -19,7 +19,7 @@ class KubernetesService:
     Service for managing Kubernetes deployments.
     
     Kubernetes is the industry standard for container orchestration,
-    used by companies like FanDuel, Netflix, and Spotify.
+    used by companies like PlatformDavid, Netflix, and Spotify.
     """
     
     def __init__(self):
@@ -183,7 +183,7 @@ class KubernetesService:
             deployment["spec"]["template"]["spec"]["containers"] = [
                 {
                     "name": service_name,
-                    "image": f"{self.registry_url}/fanduel/{service_name}:latest",
+                    "image": f"{self.registry_url}/platformdavid/{service_name}:latest",
                     "ports": [
                         {"containerPort": 8000, "protocol": "TCP"}
                     ],
@@ -226,7 +226,7 @@ class KubernetesService:
             deployment["spec"]["template"]["spec"]["containers"] = [
                 {
                     "name": service_name,
-                    "image": f"{self.registry_url}/fanduel/{service_name}:latest",
+                    "image": f"{self.registry_url}/platformdavid/{service_name}:latest",
                     "ports": [
                         {"containerPort": 80, "protocol": "TCP"}
                     ],
@@ -250,7 +250,7 @@ class KubernetesService:
             deployment["spec"]["template"]["spec"]["containers"] = [
                 {
                     "name": f"{service_name}-worker",
-                    "image": f"{self.registry_url}/fanduel/{service_name}-worker:latest",
+                    "image": f"{self.registry_url}/platformdavid/{service_name}-worker:latest",
                     "env": [
                         {"name": "ENVIRONMENT", "value": environment},
                         {"name": "SERVICE_NAME", "value": service_name}
@@ -320,13 +320,13 @@ class KubernetesService:
             "spec": {
                 "tls": [
                     {
-                        "hosts": [f"{service_name}.{environment}.fanduel.com"],
+                        "hosts": [f"{service_name}.{environment}.platformdavid.com"],
                         "secretName": f"{service_name}-{environment}-tls"
                     }
                 ],
                 "rules": [
                     {
-                        "host": f"{service_name}.{environment}.fanduel.com",
+                        "host": f"{service_name}.{environment}.platformdavid.com",
                         "http": {
                             "paths": [
                                 {

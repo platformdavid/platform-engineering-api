@@ -16,7 +16,7 @@ class BuildKiteService:
     Service for managing BuildKite CI/CD pipelines.
     
     BuildKite is a self-hosted CI/CD platform used by companies like
-    FanDuel, Netflix, and Spotify for secure, scalable CI/CD.
+    PlatformDavid, Netflix, and Spotify for secure, scalable CI/CD.
     """
     
     def __init__(self):

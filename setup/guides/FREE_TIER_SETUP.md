@@ -169,7 +169,7 @@ curl -X POST "http://localhost:8080/api/v1/services/1/provision" \
 - Demonstrates **resource efficiency**
 
 ### **2. Industry Standard Tools**
-- **GitHub Actions**: Used by Netflix, Spotify, FanDuel
+- **GitHub Actions**: Used by Netflix, Spotify, PlatformDavid
 - **Local Kubernetes**: Same as production, just local
 - **Prometheus/Grafana**: Industry standard monitoring
 - **SonarCloud**: Enterprise-grade code quality
@@ -216,7 +216,7 @@ When you get the job, this easily scales to production:
 - ✅ **Scalability** (easy cloud migration)
 - ✅ **Best practices** (monitoring, testing, security)
 
-**This is exactly what FanDuel's Platform Engineering team wants to see!** 🎯
+**This is exactly what PlatformDavid's Platform Engineering team wants to see!** 🎯
 
 ---
 

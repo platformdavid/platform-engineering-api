@@ -1,5 +1,5 @@
 """
-API tests for the FanDuel Platform Engineering API.
+API tests for the PlatformDavid Platform Engineering API.
 
 This module contains tests for the FastAPI endpoints.
 """
@@ -33,7 +33,7 @@ class TestHealthEndpoints:
         assert response.status_code == 200
         data = response.json()
         assert data["status"] == "healthy"
-        assert "FanDuel Platform Engineering API" in data["service"]
+        assert "PlatformDavid Platform Engineering API" in data["service"]
     
     def test_liveness_check(self, client):
         """Test liveness check endpoint."""
@@ -58,7 +58,7 @@ class TestRootEndpoint:
         response = client.get("/")
         assert response.status_code == 200
         data = response.json()
-        assert "Welcome to FanDuel Platform Engineering API" in data["message"]
+        assert "Welcome to PlatformDavid Platform Engineering API" in data["message"]
         assert data["version"] == "1.0.0"
         assert "/docs" in data["docs"]
 
@@ -132,7 +132,7 @@ class TestAPIDocumentation:
         response = client.get("/openapi.json")
         assert response.status_code == 200
         data = response.json()
-        assert data["info"]["title"] == "FanDuel Platform API"
+        assert data["info"]["title"] == "PlatformDavid Platform API"
         assert "paths" in data
         # Check that deployment endpoints are in the schema
         assert "/api/v1/deployments/" in data["paths"]

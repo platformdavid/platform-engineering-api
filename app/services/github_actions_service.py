@@ -19,7 +19,7 @@ class GitHubActionsService:
     Service for managing GitHub Actions CI/CD workflows.
     
     GitHub Actions is the industry standard for CI/CD, used by companies like
-    FanDuel, Netflix, and Spotify, and is completely free for open source.
+    PlatformDavid, Netflix, and Spotify, and is completely free for open source.
     """
 
     def __init__(self):

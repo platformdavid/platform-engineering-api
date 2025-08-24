@@ -1,5 +1,5 @@
 """
-Database configuration for the FanDuel Platform Engineering API.
+Database configuration for the PlatformDavid Platform Engineering API.
 
 This module configures SQLAlchemy with async support for PostgreSQL.
 """

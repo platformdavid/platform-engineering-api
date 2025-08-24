@@ -1,5 +1,5 @@
 """
-Main FastAPI application for FanDuel Platform Engineering API.
+Main FastAPI application for PlatformDavid Platform Engineering API.
 
 This module contains the FastAPI application instance and startup/shutdown events.
 """
@@ -24,7 +24,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     Handles startup and shutdown events for the FastAPI application.
     """
     # Startup
-    print("🚀 Starting FanDuel Platform Engineering API...")
+    print("🚀 Starting PlatformDavid Platform Engineering API...")
     
     # Initialize database connection
     await engine.connect()
@@ -33,7 +33,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     yield
     
     # Shutdown
-    print("🛑 Shutting down FanDuel Platform Engineering API...")
+    print("🛑 Shutting down PlatformDavid Platform Engineering API...")
     await engine.dispose()
     print("✅ Database disconnected")
 
@@ -47,7 +47,7 @@ def create_application() -> FastAPI:
     """
     app = FastAPI(
         title=settings.app_name,
-        description="Platform Engineering API for FanDuel Builder Tools",
+        description="Platform Engineering API for PlatformDavid Builder Tools",
         version="1.0.0",
         debug=settings.debug,
         lifespan=lifespan,
@@ -89,7 +89,7 @@ async def root():
     Returns basic application information.
     """
     return {
-        "message": "Welcome to FanDuel Platform Engineering API",
+        "message": "Welcome to PlatformDavid Platform Engineering API",
         "version": "1.0.0",
         "docs": "/docs",
         "health": "/api/v1/health"

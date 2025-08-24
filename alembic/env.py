@@ -1,5 +1,5 @@
 """
-Alembic environment configuration for FanDuel Platform Engineering API.
+Alembic environment configuration for PlatformDavid Platform Engineering API.
 
 This module configures Alembic for async SQLAlchemy with FastAPI.
 """
